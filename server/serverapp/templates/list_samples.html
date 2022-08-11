@@ -1,9 +1,9 @@
-<!doctype html>
-<html>
-  <head>
-    <title>List of samples for sensor {{ sensor }}</title>
-  </head>
-  <body>
+
+{% extends 'base.html' %}
+
+{% block title %}List of samples for sensor {{ sensor }}{% endblock %}
+
+{% block content %}
     <a href="/sensors/"><- back to list of sensors</a><br/><br/>
     <table border="1">
       <tr>
@@ -15,5 +15,4 @@
         </tr>
       {% endfor %}
     </table>
-  </body>
-</html>
+{% endblock %}

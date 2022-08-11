@@ -10,7 +10,7 @@ class Producer(Model):
     id = AutoField(primary_key=True)
     name = CharField(unique=True)
     description = CharField()
-    key_hash = CharField()
+    key = CharField(unique=True)
 
     class Meta:
         database = database
@@ -18,10 +18,14 @@ class Producer(Model):
 class Sensor(Model):
     producer = ForeignKeyField(Producer, backref='sensors')
 
-    id = AutoField(primary_key=True)
-    name = CharField(unique=True)
+    id = AutoField()
+    name = CharField()
 
     class Meta:
+        indexes = (
+            # Unique pair.
+            (('id', 'name'), True),
+        )
         database = database
 
 

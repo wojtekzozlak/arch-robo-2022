@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {{ message }}
+  <form method="post">
+    <label for="name">Producer name</label>
+    <input name="name" id="name" required>
+    <label for="description">description</label>
+    <input name="description" id="description" required>
+    <label for="key">key</label>
+    <input name="key" id="key" required>
+    <input type="submit" value="Add">
+  </form>
+{% endblock %}
