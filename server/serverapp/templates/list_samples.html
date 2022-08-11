@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+  <head>
+    <title>List of samples for sensor {{ sensor }}</title>
+  </head>
+  <body>
+    <a href="/sensors/"><- back to list of sensors</a><br/><br/>
+    <table border="1">
+      <tr>
+        <th>timestamp</th><th>integer value</th><th>float value</th>
+      </tr>
+      {% for s in samples %}
+        <tr>
+          <td>{{ s.timestamp }}</td><td>{{ s.int_value }}</td><td>{{ s.float_value }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>

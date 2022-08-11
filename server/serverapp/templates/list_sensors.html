@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+  <head>
+    <title>List of sensors</title>
+  </head>
+  <body>
+    <table border="1">
+      <tr>
+        <th>Producer Name</th><th>Sensor Name</th>
+      </tr>
+      {% for s in sensors %}
+        <tr>
+          <td>{{ s.producer.name }}</td>
+          <td><a href="/sensors/{{s.id}}/samples">{{ s.name }}</a></td>
+        </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>
