@@ -1,3 +1,5 @@
+import math
+
 from serverapp.auth import key_required
 from serverapp.db import Sensor, Sample
 
@@ -8,7 +10,7 @@ bp = Blueprint('sensor', __name__, url_prefix='/sensors')
 
 @bp.route('/', methods=('GET',))
 def list_sensors():
-    sensors = Sensor.select().order_by(Sensor.name)
+    sensors = Sensor.select().order_by(Sensor.producer_id, Sensor.name)
     return render_template('list_sensors.html', sensors=sensors)
 
 @bp.route('/add_sample', methods=('GET',))
@@ -40,9 +42,21 @@ def add_sample():
 
 @bp.route('/<int:sensor_id>/samples', methods=('GET',))
 def list_samples(sensor_id):
+    page_size = 50
+
+    page = int(request.args.get('page', 1))
+
     sensor = Sensor.get(sensor_id)
     samples = (Sample.select()
         .where(Sample.sensor_id==sensor_id)
         .order_by(Sample.timestamp.desc()))
 
-    return render_template('list_samples.html', sensor=sensor, samples=samples)
+    count = samples.count()
+    num_pages = math.ceil(count / page_size)
+
+    return render_template(
+        'list_samples.html',
+        sensor=sensor,
+        samples=samples.paginate(page - 1, page_size),
+        page=page,
+        num_pages=num_pages)

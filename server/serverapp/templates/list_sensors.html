@@ -4,8 +4,7 @@
 {% block title %}List of samples for sensor {{ sensor }}{% endblock %}
 
 {% block content %}
-    <a href="/"><- back to the home page</a><br/><br/>
-    <table border="1">
+    <table class="table table-striped">
       <tr>
         <th>Producer Name</th><th>Sensor Name</th>
       </tr>
@@ -17,4 +16,6 @@
       {% endfor %}
     </table>
   </body>
+
+  <a class="btn btn-secondary" href="/">Home</a>
 {% endblock %}

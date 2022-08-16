@@ -4,7 +4,7 @@
 {% block title %}List of samples for sensor {{ sensor }}{% endblock %}
 
 {% block content %}
-    <a href="/sensors/"><- back to list of sensors</a><br/><br/>
+    <h2>Samples for sensor "{{ sensor }}"</h2>
     <table class="table table-striped">
       <tr>
         <th>timestamp</th><th>integer value</th><th>float value</th>
@@ -15,4 +15,13 @@
         </tr>
       {% endfor %}
     </table>
+    {% if page > 1 %}
+      <a class="btn btn-primary" href="?page={{ page - 1 }}">Previous Page</a>
+    {% endif %}
+    {{ page }} / {{ num_pages }}
+    {% if page < num_pages %}
+      <a class="btn btn-primary" href="?page={{ page + 1 }}">Next Page</a>
+    {% endif %}
+    <br/><br/>
+    <a class="btn btn-secondary" href="/sensors/">List of sensors</a>
 {% endblock %}

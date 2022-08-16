@@ -1,10 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <ul>
-    <a href="/producers/add">Create producer</a>
-    {% for p in producers %}
-      <li>{{ p.name }}, {{ p.key }}</li>
-    {% endfor %}
-  </ul>
+  {% if producers %}
+    <table class="table table-striped p-3">
+      <tr>
+        <th>Name</th><th>Key</th><th>Description</th>
+      </tr>
+      {% for p in producers %}
+        <tr>
+          <td>{{ p.name }}</td><td>{{ p.key }}</td><td>{{ p.description }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+  No producers yet!
+  <br/><br/>
+  {% endif %}
+  <a class="btn btn-secondary" href="/">Home</a>
+  <a class="btn btn-primary" href="/producers/add">Create producer</a>
+
 {% endblock %}

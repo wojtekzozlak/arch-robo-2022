@@ -7,11 +7,9 @@
   </head>
   <body>
     <section class="container">
-      <header>
-        {% block header %}{% endblock %}
-      </header>
+      <h1>Robo2022 Sensor Data Server</h1>
       {% for message in get_flashed_messages() %}
-        <div class="flash">{{ message }}</div>
+        <div class="alert alert-danger">{{ message }}</div>
       {% endfor %}
       {% block content %}{% endblock %}
     </section>
