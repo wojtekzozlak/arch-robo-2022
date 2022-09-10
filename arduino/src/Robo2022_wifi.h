@@ -1,5 +1,5 @@
-#ifndef ROBO_2022
-#define ROBO_2022
+#ifndef ROBO_2022_WIFI
+#define ROBO_2022_WIFI
 
 // Makes a connection to a particular WiFi network.
 void SetupWiFiClient(const char* ssid, const char* password);

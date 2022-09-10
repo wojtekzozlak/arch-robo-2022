@@ -1,8 +1,10 @@
-#include "Robo2022.h"
-
-#include <cstdio>
+#include "Robo2022_wifi.h"
 
 #include <Arduino.h>
+
+#ifdef ESP8266
+
+#include <cstdio>
 #include <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>
 
@@ -93,3 +95,5 @@ bool RemoteDataCollector::LogFloat(float f) {
   Serial.printf("[RemoteDataCollector] Logging sample '%f' for sensor %s\n", f, sensor_name);
   return LogSample(buffer);
 }
+
+#endif

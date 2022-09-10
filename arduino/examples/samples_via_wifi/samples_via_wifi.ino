@@ -1,7 +1,7 @@
 // Based on https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WiFi/examples/WiFiClient/WiFiClient.ino
 
 #include <ESP8266WiFi.h>
-#include <Robo2022.h>
+#include <Robo2022_wifi.h>
 
 // Replace with actual values
 const char* ssid = "NETWORK_SSID";
