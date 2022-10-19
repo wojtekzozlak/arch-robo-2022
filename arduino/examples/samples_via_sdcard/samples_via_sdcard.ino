@@ -6,12 +6,9 @@
 #include <SimpleDHT.h>
 #include <DS1307.h>
 
-const int CS_PIN = 10;
 const int DHT_PIN = 4;
 
-File file;
 SimpleDHT11 dht11(DHT_PIN);
-
 
 void setup() {
   // Open serial communications and wait for port to open:
@@ -26,7 +23,7 @@ void setup() {
   //  }
 
   Serial.print(F("Initializing SD card..."));
-  if (!SD.begin(CS_PIN)) {
+  if (!SD.begin()) {
     Serial.println(F("initialization failed!"));
     while (1);
   }
@@ -47,13 +44,13 @@ void loop() {
     Serial.print(F(",")); Serial.println(SimpleDHTErrDuration(err)); delay(1000);
     return;
   }
-  Serial.print(F("Success!"));
+  Serial.print(F("Success!\n"));
   
   LocalDataCollector temp_collector("temperature");
   LocalDataCollector humidity_collector("humidity");
 
   temp_collector.LogInteger((int)temperature);
-  humidity_collector.LogInteger((int)humidity);
+  humidity_collector.LogFloat((int)humidity);
 
   // Sleeping for too long may result with board being stuck (dunno why).
   // Instead sleep in many shorter bursts.
