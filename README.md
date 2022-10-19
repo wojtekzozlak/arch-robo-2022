@@ -31,7 +31,7 @@ https://docs.arduino.cc/static/5fa18e7fb884a8f6381a54dae4d87551/29114/uno-i2c.pn
 If you have more `I2C` devices (e.g. other sensors) just connect them to the
 same pins in parallel.
 
-Apart from the proper wiring, no additional setup is required.
+The RTC module has to be initialized
 
 #### Card reader setup
 
@@ -60,3 +60,31 @@ void setup() {
 ```
 
 #### Logging samples
+
+In order to actually log sample, one must first create an instance of the
+`LocalDataCollector` class. The string passed indicates the "name" of the sensor
+for which the data is logged:
+
+```
+LocalDataCollector temp_collector("temperature");
+```
+
+afterwards, it is a matter of calling either `LogInteger` or `LogFloat` method of the object:
+
+```
+temp_collector.LogInteger(5);
+temp_collector.LogFloat(3.21);
+```
+
+#### Data format
+
+Samples are written to the `CSV` files, with names denoting current (from the
+RTC module perspective) date. Each line is in form of either:
+- `{date_time},{sensor_name},{integer},`
+or
+- `{date_time},{sensor_name},,float`
+
+meaning that integer and float values uses separate CSV columns.
+
+When dealing with multiple sensors, the easiest way to separate samples is to
+load file into e.g. Excel and sort by sensor name.
