@@ -8,7 +8,6 @@ namespace {
 
 DS1307 clock;
 
-
 void GetTime(char* buffer) {
   clock.begin();
   clock.getTime();
@@ -27,13 +26,21 @@ size_t GetFileName(char* name) {
 
 }  // namespace
 
+void InitializeSDCard() {
+  Serial.print(F("Initializing SD card..."));
+  if (!SD.begin()) {
+    Serial.println(F("initialization failed!"));
+    while (1);
+  }
+  Serial.println(F("initialization done."));
+}
+
 LocalDataCollector::LocalDataCollector(const char* sensor_name)
   : sensor_name(sensor_name) {}
 
 bool LocalDataCollector::LogSample(const char* params) {
   char file_name[12];
   GetFileName(file_name);
-  Serial.println(file_name);
 
   char date_time[32];
   GetTime(date_time);
@@ -47,7 +54,6 @@ bool LocalDataCollector::LogSample(const char* params) {
   char buffer[128];
   size_t log_size = sprintf(buffer, "%s,%s,%s\n", date_time, sensor_name, params);
   size_t written = f.write(buffer, log_size);
-  Serial.println(buffer);
   Serial.print(F("[LocalDataCollector] Written "));
   Serial.print(written);
   Serial.println(F(" bytes to the SD card."));
