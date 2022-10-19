@@ -8,7 +8,6 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
-    error = None
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -19,9 +18,8 @@ def login():
             session['user_id'] = username
             return redirect('/')
         else:
-            error = 'Incorrect data'
+            flash('Incorrect data')
 
-    flash(error)
     return render_template('login.html')
 
 
