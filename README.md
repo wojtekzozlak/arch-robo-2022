@@ -88,3 +88,54 @@ meaning that integer and float values uses separate CSV columns.
 
 When dealing with multiple sensors, the easiest way to separate samples is to
 load file into e.g. Excel and sort by sensor name.
+
+
+### Logging via WiFi
+
+The WiFi logging library relies on the ESP8266 built-in WiFi support and the
+existence of a remote, HTTP server to consume the data (the `server`
+subdirectory). There is no additional physical setup of the board required.
+
+#### Producers and sensors
+
+Data collection server has a concept of `producers` and `sensors`:
+
+- `producer` is an identity which owns potentially multiple `sensors`
+- `sensor` is a source of data, which groups multiple data samples.
+
+Producer is authorized using a `key`, which should be only known to the producer
+and the sensor. Without a proper key in the request, sensor is unable to
+recognize the producer and returns `403` error.
+
+Producers can be managed in the web interface of the server, after logging
+in as an admin.
+
+#### Program setup
+
+In order to log data, you must know:
+
+- `SSID` and password of you WiFi network.
+- IP of the data collection server.
+- A valid producer `key`.
+
+Library exposes a helper function for connecting to the WiFi -
+`SetupWiFiClient()`.
+
+#### Logging a sample
+
+Logging a sample requires first creating an instance of the
+`RemoteDataCollector` class. The constructor takes a key, name of the sensor
+(server will automatically add a new sensor if name is not recognized)
+and address of the server:
+
+```
+RemoteDataCollector humidity_collector(
+  /*producer_key=*/"{PUT_YOUR_KEY_HERE}",
+  /*sensor_name=*/"humidity",
+  /*server_addr=*/"{PUT_SERVER_ADDRESS_HERE}");
+```
+
+Afterwards, it is a matter of calling the `LogInteger` or `LogFloat` method,
+similarly to the SD card library.
+
+Check the examples directory for more details.
