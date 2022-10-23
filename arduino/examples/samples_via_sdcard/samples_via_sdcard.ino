@@ -4,7 +4,6 @@
 
 #include <Robo2022_sd.h>
 #include <SimpleDHT.h>
-#include <DS1307.h>
 
 const int DHT_PIN = 4;
 
@@ -33,19 +32,19 @@ void setup() {
 
 void loop() {
   Serial.println(F("Sampling DHT11"));
-  
+
   byte temperature = 0;
   byte humidity = 0;
   int err = SimpleDHTErrSuccess;
   err = dht11.read(&temperature, &humidity, NULL);
-  
+
   if (err != SimpleDHTErrSuccess) {
     Serial.print(F("Read DHT11 failed, err=")); Serial.print(SimpleDHTErrCode(err));
     Serial.print(F(",")); Serial.println(SimpleDHTErrDuration(err)); delay(1000);
     return;
   }
   Serial.print(F("Success!\n"));
-  
+
   LocalDataCollector temp_collector("temperature");
   LocalDataCollector humidity_collector("humidity");
 

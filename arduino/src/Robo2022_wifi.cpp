@@ -1,9 +1,9 @@
 #include "Robo2022_wifi.h"
 
-#include <Arduino.h>
-
+// Only for ESP8266-based board
 #ifdef ESP8266
 
+#include <Arduino.h>
 #include <cstdio>
 #include <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>
@@ -96,4 +96,4 @@ bool RemoteDataCollector::LogFloat(float f) {
   return LogSample(buffer);
 }
 
-#endif
+#endif // ifdef ESP8266

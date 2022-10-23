@@ -1,8 +1,12 @@
 #include "Robo2022_sd.h"
 
+// Ignore if this is an ESP8266-based board
+#ifndef ESP8266
+
 #include <Arduino.h>
 #include <SD.h>
 #include <DS1307.h>
+
 
 namespace {
 
@@ -74,3 +78,5 @@ bool LocalDataCollector::LogFloat(float f) {
   sprintf(buffer, ",%s", strf);
   return LogSample(buffer);
 }
+
+#endif  // ifndef ESP8266

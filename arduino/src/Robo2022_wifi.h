@@ -1,6 +1,9 @@
 #ifndef ROBO_2022_WIFI
 #define ROBO_2022_WIFI
 
+// Only for ESP8266-based board
+#ifdef ESP8266
+
 // Makes a connection to a particular WiFi network.
 void SetupWiFiClient(const char* ssid, const char* password);
 
@@ -23,5 +26,7 @@ class RemoteDataCollector {
   const char* sensor_name;
   const char* server_addr;
 };
+
+#endif // ifdef ESP8266
 
 #endif
