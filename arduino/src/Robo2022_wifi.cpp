@@ -1,9 +1,9 @@
 #include "Robo2022_wifi.h"
 
-// Only for ESP8266-based board
+#include <Arduino.h>
+
 #ifdef ESP8266
 
-#include <Arduino.h>
 #include <cstdio>
 #include <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>
@@ -76,24 +76,26 @@ bool RemoteDataCollector::LogSample(const char* params) {
 
   if (httpCode == 200) {
     Serial.println("[RemoteDataCollector] Success!");
+    return true;
   } else {
     Serial.println("[RemoteDataCollector] Server returned error:");
     Serial.println(payload);
+    return false;
   }
 }
 
 bool RemoteDataCollector::LogInteger(int i) {
   char buffer[64];
   sprintf(buffer, "int=%d", i);
-  Serial.printf("[RemoteDataCollector] Logging sample '%i' for sensor %s\n", i, sensor_name);
+  Serial.printf("[RemoteDataCollector] Logging sample '%i' for sensor '%s'\n", i, sensor_name);
   return LogSample(buffer);
 }
 
 bool RemoteDataCollector::LogFloat(float f) {
   char buffer[64];
   sprintf(buffer, "float=%f", f);
-  Serial.printf("[RemoteDataCollector] Logging sample '%f' for sensor %s\n", f, sensor_name);
+  Serial.printf("[RemoteDataCollector] Logging sample '%f' for sensor '%s'\n", f, sensor_name);
   return LogSample(buffer);
 }
 
-#endif // ifdef ESP8266
+#endif
