@@ -3,7 +3,7 @@ import math
 from serverapp.auth import key_required
 from serverapp.db import Sensor, Sample
 
-from flask import abort, Blueprint, current_app, g, render_template, render_template_string, request
+from flask import abort, Blueprint, current_app, g, render_template, render_template_string, Response, request
 
 bp = Blueprint('sensor', __name__, url_prefix='/sensors')
 
@@ -60,3 +60,23 @@ def list_samples(sensor_id):
         samples=samples.paginate(page - 1, page_size),
         page=page,
         num_pages=num_pages)
+
+@bp.route('/<int:sensor_id>/download_samples', methods=('GET',))
+def download_samples(sensor_id):
+    sensor = Sensor.get(sensor_id)
+    samples = (Sample.select()
+        .where(Sample.sensor_id==sensor_id)
+        .order_by(Sample.timestamp.desc()))
+
+    response_body = []
+    response_body.append("sensor,timestamp,integer_value,float_value")
+    for s in samples:
+        response_body.append(
+                "\"{}\",{},{},{}".format(sensor.name, s.timestamp,
+                                         s.int_value, s.float_value))
+
+    return Response(
+        "\n".join(response_body),
+        mimetype="text/csv",
+        headers={"Content-disposition": "attachmenet; filename=samples.csv"})
+
