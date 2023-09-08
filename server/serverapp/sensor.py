@@ -21,12 +21,12 @@ def add_sample():
         abort(400)
 
     int_value = request.args.get('int', None)
-    if int_value:
+    if int_value is not None:
         int_value = int(int_value)
     float_value = request.args.get('float', None)
-    if float_value:
+    if float_value is not None:
         float_value = float(float_value)
-    if not int_value and not float_value:
+    if int_value is None and float_value is None:
         abort(400)
 
     sensor, addded = Sensor.get_or_create(producer_id=g.producer,name=sensor_name)
