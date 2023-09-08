@@ -1,6 +1,12 @@
+import functools
+import influxdb_client
+from influxdb_client import Point
+from influxdb_client.client.write_api import SYNCHRONOUS
 import math
+import os
 
 from serverapp.auth import key_required
+import serverapp.config as config
 from serverapp.db import Sensor, Sample
 
 from flask import abort, Blueprint, current_app, g, render_template, render_template_string, Response, request
@@ -12,6 +18,24 @@ bp = Blueprint('sensor', __name__, url_prefix='/sensors')
 def list_sensors():
     sensors = Sensor.select().order_by(Sensor.producer_id, Sensor.name)
     return render_template('list_sensors.html', sensors=sensors)
+
+@functools.cache
+def get_influx_client():
+  return influxdb_client.InfluxDBClient(
+          url=config.INFLUXDB_URL,
+          token=config.INFLUXDB_TOKEN,
+          org=config.INFLUXDB_ORG)
+
+def write_sample_to_influxdb(sensor, sample):
+    point = (
+        Point('arduino_measurement')
+            .tag('producer', sensor.producer.name)
+            .tag('sensor', sensor.name)
+            .field('value', sample.int_value if sample.int_value else sample.float_value)
+        )
+    write_api = get_influx_client().write_api(write_options=SYNCHRONOUS)
+    write_api.write(bucket=config.INFLUXDB_BUCKET, org=config.INFLUXDB_ORG, record=point)
+
 
 @bp.route('/add_sample', methods=('GET',))
 @key_required
@@ -36,6 +60,9 @@ def add_sample():
                     int_value=int_value,
                     float_value=float_value)
     sample.save()
+
+    if config.INFLUXDB_ENABLED:
+        write_sample_to_influxdb(sensor, sample)
 
     return render_template_string('Sample added for sensor ' + sensor_name)
 
