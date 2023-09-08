@@ -4,7 +4,7 @@
 {% block title %}List of samples for sensor {{ sensor.name }}{% endblock %}
 
 {% block content %}
-    <h2>Samples for sensor "{{ sensor.name }}"</h2>
+    <h2>Samples for sensor "{{ sensor.name }}" (producer "{{sensor.producer.name}}")</h2>
     {% if influxdb_url %}
     <a href="{{influxdb_url}}">Go to influxDB to plot graphs</a><br/><br/>
     {% endif %}
