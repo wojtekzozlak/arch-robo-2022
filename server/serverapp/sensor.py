@@ -86,7 +86,8 @@ def list_samples(sensor_id):
         sensor=sensor,
         samples=samples.paginate(page - 1, page_size),
         page=page,
-        num_pages=num_pages)
+        num_pages=num_pages,
+        influxdb_url=config.INFLUXDB_URL if config.INFLUXDB_ENABLED else None)
 
 @bp.route('/<int:sensor_id>/download_samples', methods=('GET',))
 def download_samples(sensor_id):

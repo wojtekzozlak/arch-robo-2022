@@ -5,6 +5,9 @@
 
 {% block content %}
     <h2>Samples for sensor "{{ sensor.name }}"</h2>
+    {% if influxdb_url %}
+    <a href="{{influxdb_url}}">Go to influxDB to plot graphs</a><br/><br/>
+    {% endif %}
     <table class="table table-striped">
       <tr>
         <th>timestamp</th><th>integer value</th><th>float value</th>
