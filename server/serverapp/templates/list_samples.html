@@ -27,5 +27,6 @@
     {% endif %}
     <br/><br/>
     <a class="btn btn-secondary" href="/sensors/">List of sensors</a>
-    <a class="btn btn-primary" href="/sensors/{{ sensor.id }}/download_samples">Download samples (CSV format)</a>
+    <a class="btn btn-primary" href="/sensors/{{ sensor.id }}/download_samples/0">Download samples (CSV format)</a>
+    <a class="btn btn-primary" href="/sensors/{{ sensor.id }}/download_samples/1">Download samples (CSV format, de-duped)</a>
 {% endblock %}

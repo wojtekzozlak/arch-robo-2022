@@ -89,12 +89,15 @@ def list_samples(sensor_id):
         num_pages=num_pages,
         influxdb_url=config.INFLUXDB_URL if config.INFLUXDB_ENABLED else None)
 
-@bp.route('/<int:sensor_id>/download_samples', methods=('GET',))
-def download_samples(sensor_id):
+@bp.route('/<int:sensor_id>/download_samples/<int:dedup>', methods=('GET',))
+def download_samples(sensor_id, dedup):
     sensor = Sensor.get(sensor_id)
     samples = (Sample.select()
         .where(Sample.sensor_id==sensor_id)
         .order_by(Sample.timestamp.desc()))
+
+    if dedup:
+        samples = dedup_samples(list(samples))
 
     response_body = []
     response_body.append("sensor,timestamp,integer_value,float_value")
@@ -108,3 +111,19 @@ def download_samples(sensor_id):
         mimetype="text/csv",
         headers={"Content-disposition": "attachmenet; filename=samples.csv"})
 
+def dedup_samples(samples):
+    if len(samples) < 3:
+        return samples
+
+    result = []
+    result.append(samples[0])
+    for i in range(0, len(samples) - 2):
+        a = samples[i]
+        b = samples[i+1]
+        c = samples[i+2]
+        if (b.int_value == a.int_value and b.float_value == a.float_value and
+            b.int_value == c.int_value and b.float_value == c.float_value):
+            continue
+        result.append(b)
+    result.append(samples[-1])
+    return result
