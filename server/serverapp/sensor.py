@@ -31,7 +31,7 @@ def write_sample_to_influxdb(sensor, sample):
         Point('arduino_measurement')
             .tag('producer', sensor.producer.name)
             .tag('sensor', sensor.name)
-            .field('value', sample.int_value if sample.int_value else sample.float_value)
+            .field('value', (float) (sample.int_value if sample.int_value else sample.float_value))
         )
     write_api = get_influx_client().write_api(write_options=SYNCHRONOUS)
     write_api.write(bucket=config.INFLUXDB_BUCKET, org=config.INFLUXDB_ORG, record=point)
